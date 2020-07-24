@@ -15,68 +15,62 @@ body {
     background-color: white;
 }
 
+header {
+    position: fixed;
+    top: 0;
+    width: 100%
+}
+
 .container {
     width: 800px;
     max-width: 80%;
-    padding: 10 px;
+    padding: 10px;
 }
 
-.btn-grid {
-    display: grid;
-    grid-template-columns: repeat(2, auto);
-    gap: 10px;
-    margin: 20px 0;
-}
-
-.btn {
-    background-color: purple;
-    height: 200px;
-    border-radius: 5px;
-    padding: 5px 10px;
+#menu {
     color: white;
-    margin: 10px;
-}
-
-.btn:hover {
-    color: white;
-    background-color: #990099;
-}
-
-.btnstartnext {
+    padding: 5px 15px;
     background-color: purple;
     height: 150px;
     width: 250px;
     border-radius: 5px;
-    padding: 5px 10px;
-    color: white;
-    margin: 10px;
+    margin: auto 33%;
+    font-size: 50px;
 }
 
-.btnstartnext:hover {
-    color: white;
+#menu:hover {
     background-color: #990099;
 }
-.btn.correct {
-    background-color: #cc00cc;
+
+#questionsDiv {
+    margin: auto;
 }
 
-.btn.wrong {
-    background-color:#330033;
+label {
+    margin-right: 10px;
+}
+
+input {
+    margin-bottom: 20px;
+    width: 50%;
+    border: 1px solid lightgray;
+}
+
+h1 {
+    margin: 33%;
+    font-weight: bolder;
+}
+
+li {
+    background-color: purple;
+    height: 100px;
+    border-radius: 10px;
+    padding-top: 25px;
     color: white;
+    margin-top: 30px;
+    text-align: center;
 }
 
-.start-btn, .next-btn {
-    font-size: 1.5rem;
-    font-weight: bold;
-    padding: 10px 20px;
-}
-
-.controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.hide {
-    display: none;
+li:hover {
+    background-color: #990099;
 }

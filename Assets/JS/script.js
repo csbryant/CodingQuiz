@@ -1,114 +1,191 @@
-var startButton = document.getElementById('start-btn')
-var nextButton = document.getElementById('next-btn')
-var questionContainerEl = document.getElementById('question-container')
-var questionEl = document.getElementById('question')
-var answerButtonsEl = document.getElementById('answer-buttons')
+//Variables
 
-let shuffledQuestions, currentQuestionIndex
+var score = 0;
+var questionIndex = 0;
+var currentTime = document.querySelector("#currentTime");
+var timer = document.querySelector("#menu");
+var questionsDiv = document.querySelector("#questionsDiv");
+var playerMessage = document.querySelector("#playerMessage");
 
-startButton.addEventListener('click', startGame)
-nextButton.addEventListener('click', () => {
-  currentQuestionIndex++
-  setNextQuestion()
-})
+var secondsLeft = 100;
+var penalty = 10;
+var holdInterval = 0;
+var questionBox = document.createElement("ul");
 
-function startGame() {
-  startButton.classList.add('hide')
-  shuffledQuestions = questions.sort(() => Math.random() - .5)
-  currentQuestionIndex = 0
-  questionContainerEl.classList.remove('hide')
-  setNextQuestion()
-}
 
-function setNextQuestion() {
-  resetState()
-  showQuestion(shuffledQuestions[currentQuestionIndex])
-}
 
-function showQuestion(question) {
-  questionEl.innerText = question.question
-  question.answers.forEach(answer => {
-    var button = document.createElement('button')
-    button.innerText = answer.text
-    button.classList.add('btn')
-    if (answer.correct) {
-      button.dataset.correct = answer.correct
+//Timer
+
+timer.addEventListener("click", function () {
+    if (holdInterval === 0) {
+        holdInterval = setInterval(function () {
+            secondsLeft--;
+            currentTime.textContent = "Time: " + secondsLeft;
+
+            if (secondsLeft <= 0) {
+                clearInterval(holdInterval);
+                results();
+                currentTime.textContent = "Time is up!";
+            }
+        }, 1000);
     }
-    button.addEventListener('click', selectAnswer)
-    answerButtonsEl.appendChild(button)
-  })
+    displayQuestions(questionIndex);
+});
+
+
+
+function displayQuestions(questionIndex) {
+    questionsDiv.innerHTML = "";
+    questionBox.innerHTML = "";
+
+    for (var i = 0; i < questions.length; i++) {
+        var userQuestion = questions[questionIndex].question;
+        var userChoices = questions[questionIndex].choices;
+        questionsDiv.textContent = userQuestion;
+    }
+
+    userChoices.forEach(function (newItem) {
+        var listItem = document.createElement("li");
+        listItem.textContent = newItem;
+        questionsDiv.appendChild(questionBox);
+        questionBox.appendChild(listItem);
+        listItem.addEventListener("click", (rightOrWrong));
+    })
 }
 
-function resetState() {
-  nextButton.classList.add('hide')
-  while (answerButtonsEl.firstChild) {
-    answerButtonsEl.removeChild(answerButtonsEl.firstChild)
-  }
+
+// Checks if answer was right or wrong
+function rightOrWrong(event) {
+    var selection = event.target;
+
+    if (selection.matches("li")) {
+
+        if (selection.textContent == questions[questionIndex].answer) {
+            score++;
+            playerMessage.textContent = "Correct! The answer is:  " + questions[questionIndex].answer;
+  
+        } else {
+            playerMessage.textContent = "Wrong! The correct answer is:  " + questions[questionIndex].answer;
+            secondsLeft -= penalty;
+        }
+
+    }
+    questionIndex++;
+
+    if (questionIndex >= questions.length) {
+        results();
+        playerMessage.textContent = ""
+    } else {
+        displayQuestions(questionIndex);
+    }
+
 }
 
-function selectAnswer(e) {
-  var selectedButton = e.target
-  var correct = selectedButton.dataset.correct
-  Array.from(answerButtonsEl.children).forEach(button => {
-    setStatusClass(button, button.dataset.correct)
-  })
-  if (shuffledQuestions.length > currentQuestionIndex + 1) {
-    nextButton.classList.remove('hide')
-  } else {
-    startButton.innerText = 'Restart'
-    startButton.classList.remove('hide')
-  }
+//Results
+
+function results() {
+    questionsDiv.innerHTML = "";
+    currentTime.innerHTML = "";
+
+    // Heading:
+    var createResults = document.createElement("h1");
+    createResults.setAttribute("id", "createH1");
+    createResults.textContent = "Results"
+
+    questionsDiv.appendChild(createResults);
+
+    // Paragraph
+    var createP = document.createElement("p");
+    createP.setAttribute("id", "createP");
+
+    questionsDiv.appendChild(createP);
+
+    // Calculates time remaining and replaces it with score
+    if (secondsLeft >= 0) {
+        var timeRemaining = secondsLeft;
+        var createP2 = document.createElement("p");
+        clearInterval(holdInterval);
+        createP.textContent = "Your final score is " + secondsLeft + " seconds with " + score + "/" + questions.length + " questions correct!";
+
+        questionsDiv.appendChild(createP2);
+    }
+
+    // Enters Name
+    var createLabel = document.createElement("label");
+    createLabel.setAttribute("id", "createLabel");
+    createLabel.textContent = "Enter your name: ";
+
+    questionsDiv.appendChild(createLabel);
+
+    // input
+    var createInput = document.createElement("input");
+    createInput.setAttribute("type", "text");
+    createInput.setAttribute("id", "initials");
+    createInput.textContent = "";
+
+    questionsDiv.appendChild(createInput);
+
+    // submit
+    var createSubmit = document.createElement("button");
+    createSubmit.setAttribute("type", "menu");
+    createSubmit.setAttribute("id", "menu");
+    createSubmit.textContent = "Submit";
+
+    questionsDiv.appendChild(createSubmit);
+
+    // Add High Scores
+    createSubmit.addEventListener("click", function () {
+        var initials = createInput.value;
+
+        if (initials === null) {
+
+            console.log("No value entered!");
+
+        } else {
+            var finalScore = {
+                initials: initials,
+                score: timeRemaining
+            }
+            console.log(finalScore);
+            var allScores = localStorage.getItem("allScores");
+            if (allScores === null) {
+                allScores = [];
+            } else {
+                allScores = JSON.parse(allScores);
+            }
+            allScores.push(finalScore);
+            var newScore = JSON.stringify(allScores);
+            localStorage.setItem("allScores", newScore);
+            window.location.replace("./HighScores.html");
+        }
+    });
+
 }
 
-function setStatusClass(element, correct) {
-  clearStatusClass(element)
-  if (correct) {
-    element.classList.add('correct')
-  } else {
-    element.classList.add('wrong')
-  }
-}
-
-function clearStatusClass(element) {
-  element.classList.remove('correct')
-  element.classList.remove('wrong')
-}
+//Questions
 
 var questions = [
-  {
-    question: 'Which function in javascript returns the largest integer less than or equal to a given number?',
-    answers: [
-      { text: 'Math.floor()', correct: true },
-      { text: 'Math.abs()', correct: false },
-      { text: 'Math.asin()', correct: false },
-      { text: 'Math.tan()', correct: false }
-    ]
-  },
-  {
+    {
+      question: 'Which function in javascript returns the largest integer less than or equal to a given number?',
+      choices: ['Math.floor()', 'Math.abs()', 'Math.asin()', 'Math.tan()'],
+      answer: 'Math.floor()'
+    },
+
+    {
     question: 'What does DOM stand for?',
-    answers: [
-      { text: 'Document Obtuse Molecule', correct: false },
-      { text: 'Digital Object Model', correct: false },
-      { text: 'Document Object Model', correct: true },
-      { text: 'Digital Obstruct Markup', correct: false }
-    ]
-  },
-  {
+    choices: ['Document Obtuse Molecule', 'Digital Object Model', 'Document Object Model', 'Digital Obstruct Markup'],
+    answer: 'Document Object Model'
+    },
+
+    {
     question: 'Which Document method returns an Element object representing the element whose id property matches the specified string?',
-    answers: [
-      { text: 'getIdByElement()', correct: false },
-      { text: 'getElementById()', correct: true },
-      { text: 'grabElementById()', correct: false },
-      { text: 'returnElementById', correct: false }
-    ]
-  },
-  {
+    choices: ['getIdByElement()', 'getElementById()', 'grabElementById()', 'returnElementById'],
+    answer: 'getElementById()'
+    },
+
+    {
     question: 'Which of these events should fire when the user presses a key on the keyboard?',
-    answers: [
-      { text: '.onkeypress', correct: true },
-      { text: '.onkey', correct: false },
-      { text: '.downkey', correct: false },
-      {text: '.keypress', correct: false}
-    ]
-  }
-]
+    choices: ['.onkeypress', '.onkey', '.downkey', '.keypress'],
+    answer: '.onkeypress'
+    }
+];
