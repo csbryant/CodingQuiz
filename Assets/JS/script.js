@@ -9,21 +9,20 @@ var playerMessage = document.querySelector("#playerMessage");
 
 var secondsLeft = 100;
 var penalty = 10;
-var holdInterval = 0;
+var interval = 0;
 var questionBox = document.createElement("ul");
-
 
 
 //Timer
 
 timer.addEventListener("click", function () {
-    if (holdInterval === 0) {
-        holdInterval = setInterval(function () {
+    if (interval === 0) {
+        interval = setInterval(function () {
             secondsLeft--;
             currentTime.textContent = "Time: " + secondsLeft;
 
             if (secondsLeft <= 0) {
-                clearInterval(holdInterval);
+                clearInterval(interval);
                 results();
                 currentTime.textContent = "Time is up!";
             }
@@ -33,6 +32,7 @@ timer.addEventListener("click", function () {
 });
 
 
+//Creates questions as list elements
 
 function displayQuestions(questionIndex) {
     questionsDiv.innerHTML = "";
@@ -55,6 +55,7 @@ function displayQuestions(questionIndex) {
 
 
 // Checks if answer was right or wrong
+
 function rightOrWrong(event) {
     var selection = event.target;
 
@@ -100,11 +101,11 @@ function results() {
 
     questionsDiv.appendChild(createP);
 
-    // Calculates time remaining and replaces it with score
+    // Sets Score
     if (secondsLeft >= 0) {
         var timeRemaining = secondsLeft;
         var createP2 = document.createElement("p");
-        clearInterval(holdInterval);
+        clearInterval(interval);
         createP.textContent = "Your final score is " + secondsLeft + " seconds with " + score + "/" + questions.length + " questions correct!";
 
         questionsDiv.appendChild(createP2);
@@ -133,42 +134,35 @@ function results() {
 
     questionsDiv.appendChild(createSubmit);
 
-    // Add High Scores
-    createSubmit.addEventListener("click", function () {
-        var initials = createInput.value;
-
-        if (initials === null) {
-
-            console.log("No value entered!");
-
-        } else {
-            var finalScore = {
-                initials: initials,
-                score: timeRemaining
-            }
-            console.log(finalScore);
-            var allScores = localStorage.getItem("allScores");
-            if (allScores === null) {
-                allScores = [];
-            } else {
-                allScores = JSON.parse(allScores);
-            }
-            allScores.push(finalScore);
-            var newScore = JSON.stringify(allScores);
-            localStorage.setItem("allScores", newScore);
-            window.location.replace("./HighScores.html");
+    // saves name and score
+    createSubmit.addEventListener("click", function() {
+        var highScores = localStorage.getItem("highScores")
+       if (highScores) {
+        highScores = JSON.parse(localStorage.getItem("highScores"))
         }
-    });
+        else {
+        highScores = [];
+        } 
+    var userScore = {
+        "name": createInput.value,
+        "score": secondsLeft
+    }
+    highScores.push(userScore)
+    var stringifyHighScores = JSON.stringify(highScores);
+    localStorage.setItem("highScores", stringifyHighScores);
+    })
 
 }
+
+
 
 //Questions
 
 var questions = [
     {
-      question: 'Which function in javascript returns the largest integer less than or equal to a given number?',
-      choices: ['Math.floor()', 'Math.abs()', 'Math.asin()', 'Math.tan()'],
-      answer: 'Math.floor()'
+    question: 'Which function in javascript returns the largest integer less than or equal to a given number?',
+    choices: ['Math.floor()', 'Math.abs()', 'Math.asin()', 'Math.tan()'],
+    answer: 'Math.floor()'
     },
 
     {
@@ -187,5 +181,18 @@ var questions = [
     question: 'Which of these events should fire when the user presses a key on the keyboard?',
     choices: ['.onkeypress', '.onkey', '.downkey', '.keypress'],
     answer: '.onkeypress'
+    },
+
+    {
+    question: 'Which method returns the first element that matches a specified CSS selector(s) in a document?',
+    choices: ['.querySelection()', '.querySelect()', '.methodSelector()', '.querySelector()'],
+    answer: '.querySelector()'
+    },
+
+    {
+    question: 'What object is used to store multiple values in a single variable:',
+    choices: ['Array', 'Arrangement', 'Assemble', 'lineUp'],
+    answer: 'var x = document.getElementById("myTextarea");'
     }
+
 ];
