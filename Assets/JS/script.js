@@ -88,20 +88,18 @@ function results() {
     questionsDiv.innerHTML = "";
     currentTime.innerHTML = "";
 
-    // Heading:
     var createResults = document.createElement("h1");
     createResults.setAttribute("id", "createH1");
     createResults.textContent = "Results"
 
     questionsDiv.appendChild(createResults);
 
-    // Paragraph
     var createP = document.createElement("p");
     createP.setAttribute("id", "createP");
 
     questionsDiv.appendChild(createP);
 
-    // Sets Score
+    // shows score
     if (secondsLeft >= 0) {
         var timeRemaining = secondsLeft;
         var createP2 = document.createElement("p");
@@ -111,7 +109,7 @@ function results() {
         questionsDiv.appendChild(createP2);
     }
 
-    // Enters Name
+    // enters name
     var createLabel = document.createElement("label");
     createLabel.setAttribute("id", "createLabel");
     createLabel.textContent = "Enter your name: ";
@@ -121,9 +119,7 @@ function results() {
     // input
     var createInput = document.createElement("input");
     createInput.setAttribute("type", "text");
-    createInput.setAttribute("id", "initials");
-    createInput.textContent = "";
-
+    createInput.setAttribute("id", "name");
     questionsDiv.appendChild(createInput);
 
     // submit
@@ -150,9 +146,13 @@ function results() {
     highScores.push(userScore)
     var stringifyHighScores = JSON.stringify(highScores);
     localStorage.setItem("highScores", stringifyHighScores);
+    window.location.replace("./highscores.html") ;
     })
-
 }
+
+
+
+
 
 
 
