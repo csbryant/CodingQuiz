@@ -81,6 +81,10 @@ li:hover {
     background-color: #990099;
 }
 
+#playerMessage {
+    font-style: italic;
+}
+
 /* High Score Elements */
 
 #return {
