@@ -2,29 +2,32 @@
 
 var score = 0;
 var questionIndex = 0;
-var currentTime = document.querySelector("#currentTime");
-var timer = document.querySelector("#menu");
+var timer = document.querySelector("#timer");
+var countDown = document.querySelector("#menu");
 var questionsDiv = document.querySelector("#questionsDiv");
 var playerMessage = document.querySelector("#playerMessage");
 
-var secondsLeft = 100;
+
+//Variables for timer
+var secondsScore = 100;
 var penalty = 10;
 var interval = 0;
 var questionBox = document.createElement("ul");
 
 
-//Timer
+//Start Button setting off timer
 
-timer.addEventListener("click", function () {
+countDown.addEventListener("click", function () {
     if (interval === 0) {
         interval = setInterval(function () {
-            secondsLeft--;
-            currentTime.textContent = "Time: " + secondsLeft;
+            secondsScore--;
+            timer.textContent = "Time: " + secondsScore;
 
-            if (secondsLeft <= 0) {
+            if (secondsScore <= 0) {
                 clearInterval(interval);
                 results();
-                currentTime.textContent = "Time is up!";
+                timer.textContent = "You are out of time!";
+                playerMessage.textContent = ""
             }
         }, 1000);
     }
@@ -67,7 +70,7 @@ function rightOrWrong(event) {
   
         } else {
             playerMessage.textContent = "Wrong! The correct answer is:  " + questions[questionIndex].answer;
-            secondsLeft -= penalty;
+            secondsScore -= penalty;
         }
 
     }
@@ -86,7 +89,7 @@ function rightOrWrong(event) {
 
 function results() {
     questionsDiv.innerHTML = "";
-    currentTime.innerHTML = "";
+    timer.innerHTML = "";
 
     var createResults = document.createElement("h1");
     createResults.setAttribute("id", "createH1");
@@ -100,11 +103,10 @@ function results() {
     questionsDiv.appendChild(createP);
 
     // shows score
-    if (secondsLeft >= 0) {
-        var timeRemaining = secondsLeft;
+    if (secondsScore >= 0) {
         var createP2 = document.createElement("p");
         clearInterval(interval);
-        createP.textContent = "Your final score is " + secondsLeft + " seconds with " + score + "/" + questions.length + " questions correct!";
+        createP.textContent = "Your final score is " + secondsScore + " seconds with " + score + "/" + questions.length + " questions correct!";
 
         questionsDiv.appendChild(createP2);
     }
@@ -141,7 +143,7 @@ function results() {
         } 
     var userScore = {
         "name": createInput.value,
-        "score": secondsLeft
+        "score": secondsScore
     }
     highScores.push(userScore)
     var stringifyHighScores = JSON.stringify(highScores);
@@ -149,50 +151,3 @@ function results() {
     window.location.replace("./highscores.html") ;
     })
 }
-
-
-
-
-
-
-
-//Questions
-
-var questions = [
-    {
-    question: 'Which function in javascript returns the largest integer less than or equal to a given number?',
-    choices: ['Math.floor()', 'Math.abs()', 'Math.asin()', 'Math.tan()'],
-    answer: 'Math.floor()'
-    },
-
-    {
-    question: 'What does DOM stand for?',
-    choices: ['Document Obtuse Molecule', 'Digital Object Model', 'Document Object Model', 'Digital Obstruct Markup'],
-    answer: 'Document Object Model'
-    },
-
-    {
-    question: 'Which Document method returns an Element object representing the element whose id property matches the specified string?',
-    choices: ['getIdByElement()', 'getElementById()', 'grabElementById()', 'returnElementById'],
-    answer: 'getElementById()'
-    },
-
-    {
-    question: 'Which of these events should fire when the user presses a key on the keyboard?',
-    choices: ['.onkeypress', '.onkey', '.downkey', '.keypress'],
-    answer: '.onkeypress'
-    },
-
-    {
-    question: 'Which method returns the first element that matches a specified CSS selector(s) in a document?',
-    choices: ['.querySelection()', '.querySelect()', '.methodSelector()', '.querySelector()'],
-    answer: '.querySelector()'
-    },
-
-    {
-    question: 'What object is used to store multiple values in a single variable:',
-    choices: ['Array', 'Arrangement', 'Assemble', 'lineUp'],
-    answer: 'var x = document.getElementById("myTextarea");'
-    }
-
-];

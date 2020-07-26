@@ -21,6 +21,12 @@ header {
     width: 100%
 }
 
+#timer {
+    font-size: 40px;
+    margin-top: 5px;
+    margin-left: 10px;
+}
+
 .container {
     width: 800px;
     max-width: 80%;
@@ -39,21 +45,6 @@ header {
 }
 
 #menu:hover {
-    background-color: #990099;
-}
-
-#return {
-    color: white;
-    padding: 5px 15px;
-    background-color: purple;
-    height: 150px;
-    width: 250px;
-    border-radius: 5px;
-    margin: auto;
-    font-size: 50px;
-}
-
-#return:hover {
     background-color: #990099;
 }
 
@@ -88,4 +79,26 @@ li {
 
 li:hover {
     background-color: #990099;
+}
+
+/* High Score Elements */
+
+#return {
+    color: white;
+    padding: 5px 15px;
+    background-color: purple;
+    height: 150px;
+    width: 250px;
+    border-radius: 5px;
+    margin: auto;
+    font-size: 50px;
+}
+
+#return:hover {
+    background-color: #990099;
+}
+
+ul {
+    margin-top: 10px;
+    font-size: larger;
 }
