@@ -2,7 +2,7 @@
 
 <a href="https://csbryant.github.io/CodingQuiz/">Link Here</a>
 
-<img src= "https://raw.githubusercontent.com/csbryant/CodingQuiz/master/Assets/Images/1.png>
+<img src= "https://raw.githubusercontent.com/csbryant/CodingQuiz/master/Assets/Images/1.png">
 
 Coding Quiz contains a 6 question quiz. Score is based on the timer. When a user gets a question wrong, 10 seconds is subtracted from the clock. They will be asked to submit a high score and then afterwards are taken to a high score page. The scores are set on local storage.
 
