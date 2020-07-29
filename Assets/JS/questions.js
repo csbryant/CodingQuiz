@@ -34,7 +34,7 @@ var questions = [
     {
     question: 'What object is used to store multiple values in a single variable:',
     choices: ['Array', 'Arrangement', 'Assemble', 'lineUp'],
-    answer: 'var x = document.getElementById("myTextarea");'
+    answer: 'Array'
     }
 
 ];
